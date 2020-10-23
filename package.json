@@ -4,8 +4,12 @@
   "description": "A platform for the creative",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node src/server.js",
-    "lint": "eslint ./src/ --fix"
+    "start": "babel-node src/index.js",
+    "lint": "eslint ./src/ --fix",
+    "watch": "npm run winston && nodemon --exec babel-node -r ./node_modules/dotenv/config ./src/index.js",
+    "winston": "babel-node ./src/utils/winston.js",
+    "migrate": "babel-node ./src/scripts/migrate",
+    "build": "babel src -d dist"
   },
   "repository": {
     "type": "git",
@@ -26,13 +30,28 @@
     "@babel/register": "^7.12.1",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
+    "chalk": "^4.1.0",
+    "child-process-promise": "^2.2.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "errorhandler": "^1.5.1",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash.merge": "^4.6.2",
     "method-override": "^3.0.0",
     "morgan": "^1.10.0",
+    "nodemon": "^2.0.6",
+    "passport": "^0.4.1",
+    "pg": "^8.4.1",
+    "sequelize": "^6.3.5",
+    "sequelize-cli": "^6.2.0",
+    "socket.io": "^2.3.0",
+    "swagger-jsdoc": "^4.3.1",
     "swagger-ui-express": "^4.1.4",
+    "winston": "^3.3.3",
     "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.11.0"
   }
 }
