@@ -4,6 +4,7 @@ import JWTHelper from "../utils/jwt";
 import Responses from "../utils/response";
 import userService from "../services/auth.service";
 import authService from "../services/auth.service";
+import db from '../models'
 
 class UserController {
   async createUser(req, res) {
@@ -14,12 +15,12 @@ class UserController {
      */
     const hashedPassword = hash.generateSync(req.body.password);
     const userData = {
-      firstName: req.body.firstPassword,
+      firstName: req.body.firstName,
       lastName: req.body.lastName,
       password: hashedPassword,
       email: req.body.email,
     };
-    const user = await Users.create(userData);
+    const user = await db.users.create(userData);
     const token = await JWTHelper.signToken(user);
 
     const data = {
@@ -48,13 +49,15 @@ class UserController {
   }
 
   async verifyAccount(req, res) {
-      const user = Users.findOne({ where: { id: req.params.id }})
-      await user.update(
-          {
-              isVerified: true
-          },
-          { where: { wmail: user.email } }
-      )
-      return res.status(200).redirect('/')
+    const user = Users.findOne({ where: { id: req.params.id } });
+    await user.update(
+      {
+        isVerified: true,
+      },
+      { where: { wmail: user.email } }
+    );
+    return res.status(200).redirect("/");
   }
 }
+
+export default new UserController();
