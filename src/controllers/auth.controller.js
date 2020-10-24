@@ -5,6 +5,7 @@ import Responses from "../utils/response";
 import userService from "../services/auth.service";
 import authService from "../services/auth.service";
 import db from '../models'
+import Mailer from "../services/mailer.services";
 
 class UserController {
   async createUser(req, res) {
@@ -14,6 +15,7 @@ class UserController {
      * @param password
      */
     const hashedPassword = hash.generateSync(req.body.password);
+    const host = `${req.protocol}://${req.get('host')}`
     const userData = {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -29,6 +31,15 @@ class UserController {
       lastName: user.lastName,
       token,
     };
+
+    const mail = new Mailer({
+      name: userData.firstName,
+      to: userData.email,
+      host,
+      token
+    })
+
+    await mail.sendVerificationEmail()
     return Responses.handleSuccess(201, "success", res, data);
   }
 
